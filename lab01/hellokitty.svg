@@ -52,7 +52,7 @@
                      100 400 0 0 0 270 120,
                      170 100 0 0 0 180 128,
                      500 118, 50 0 0 84 195,
-                     195 154 3 1 0 448 256"  
+                     195 154 3 1 0 448 256 z"  
  stroke-width="10" stroke="#F00" fill="none" opacity="0.3"/>
 
 
@@ -63,7 +63,7 @@
                      100 400 0 0 0 270 120,
                      170 100 0 0 0 180 128,
                      500 118, 50 0 0 84 195,
-                     195 154 3 1 0 448 256"   repeatCount="indefinite" rotate="auto"/>
+                     195 154 3 1 0 448 256 z"   repeatCount="indefinite" rotate="auto"/>
     <animate attributeName="r" dur="6s" repeatCount="indefinite"/>
   </circle>
 

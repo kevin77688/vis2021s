@@ -43,8 +43,9 @@
   <text x="438" y="12" font-size="12" text-anchor="start" fill="red">448</text>
   <text x="492" y="12" font-size="12" text-anchor="start" fill="red">512</text>
 
-  <path d="M256 256 V270 V242 M256 256 H270 H242" stroke="black" fill="white"></path>
-  <text x="254" y="250" font-size="16" text-anchor="middle" fill="red">(256, 256)</text>
+  <path d="M390 223, A90 90 0 1 0 337 174, 160 160 0 0 0 177 172, 90 90 0 1 0 124 223, 160 160 0 1 0 390 223 z" stroke-width="10" stroke="#F00" fill="none" opacity="0.3" />
+  <circle cx="0" cy="0" r="5" stroke="blue" fill="none">
+    <animateMotion dur="10s" path="M390 223, A90 90 0 1 0 337 174, 160 160 0 0 0 177 172, 90 90 0 1 0 124 223, 160 160 0 1 0 390 223 z" repeatCount="indefinite" rotate="auto"/>
+  </circle>
 </svg>
-
     
