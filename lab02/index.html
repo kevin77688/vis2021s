@@ -69,7 +69,7 @@
 	</head>
 	<body>
 		<div>
-			Lab 02 treemap
+			Lab 02 treemap 109年臺北市消防緊急救護服務
 		</div>
 		<ul>
 			<li>遠距教學授課防疫演練: 2021.03.18 (四) </li>
@@ -120,8 +120,8 @@
 								
 				//設定透明度，分數越低越透明
 				const opacity = d3.scaleLinear()
-								.domain([100, 50])
-								.range([1,.1])
+								.domain([100, 100])
+								.range([1,1])
 								
 				//化長方形
 				svg
@@ -169,7 +169,7 @@
 					.append('text')
 					 .attr('x', ({x0}) => x0 + 1)
 					 .attr('y', ({y0}) => y0 + 50)
-					 .text(({data}) => parseFloat(data.seconds) > 30 ? '不及格' : '(' + data.seconds + '秒)')
+					 .text(({data}) => data.seconds)
 					 .attr('font-size', '.9rem')
 					 .attr('fill', 'white')
 					 
@@ -191,6 +191,86 @@
 		<script>
 			window.addEventListener('load', () => {
 				const treemapContainer = document.getElementById('treemap')
+        const allBoss = [];
+        var studentArr;
+
+        var txtFile = new XMLHttpRequest();
+        txtFile.open(
+          "GET",
+          "https://raw.githubusercontent.com/kevin77688/vis2021s/master/lab02/data.csv",
+          true
+        );
+        txtFile.onreadystatechange = function () {
+          if (txtFile.readyState === 4) {
+            // Makes sure the document is ready to parse.
+            if (txtFile.status === 200) {
+              // Makes sure it's found the file.
+              allText = txtFile.responseText;
+              studentArr = txtFile.responseText
+                .split("\n")
+                .map((e) => e.split(",")); // Will separate each line into an array
+
+              const d3Json = {
+                children: [],
+                name: "vis2021s",
+              };
+
+              //先由小到大排列，算出名次、級距、再算出分數
+              const mapping = new Array(41).fill(-1);
+              console.log(studentArr);
+              const scoreSort = studentArr
+                .sort((x, y) => {
+                  let a = isNaN(parseFloat(x[3])) ? 40 : parseFloat(x[3]);
+                  let b = isNaN(parseFloat(y[3])) ? 40 : parseFloat(y[3]);
+
+                  return a - b;
+                })
+                .map((e) => (isNaN(parseFloat(e[3])) ? 40 : parseFloat(e[3])));
+
+              const scoreSet = [
+                ...new Set([...scoreSort.filter((e) => e <= 30)]),
+              ];
+              const step = (100 - 60) / scoreSet.length;
+
+              for (let i of scoreSort) {
+                const idx = scoreSet.indexOf(i);
+                let score;
+                if (idx == -1) {
+                  score = 50;
+                } else {
+                  score = (100 - step * idx).toFixed(2);
+                }
+                mapping[i] = score;
+              }
+
+              for (let i of studentArr) {
+                const bossName = i[1];
+
+                if (allBoss.indexOf(bossName) == -1) {
+                  allBoss.push(bossName);
+                  d3Json.children.push({
+                    name: bossName,
+                    children: [],
+                  });
+                }
+
+                const seconds = isNaN(parseInt(i[2])) ? 40 : parseInt(i[2]);
+
+                d3Json.children
+                  .find((e) => e.name == bossName)
+                  .children.push({
+                    name: i[0],
+                    seconds,
+                    value: parseFloat(mapping[seconds]),
+                  });
+              }
+              treemapContainer.appendChild(
+                mkSVG(treemapContainer, allBoss, d3Json)
+              );
+            }
+          }
+        };
+        txtFile.send(null);
 				
 				document.getElementById('dropfile').addEventListener('dragover', (evt) => {
 					evt.preventDefault()
@@ -248,7 +328,7 @@
 							
 							
 							for(let i of studentArr){
-								const bossName = i[2].length ? i[2] : (i[1] == '碩' ? '未知' : '資工四')
+								const bossName = i[1]
 								
 								
 								if(allBoss.indexOf(bossName) == -1){
@@ -259,7 +339,7 @@
 									})
 								}
 								
-								const seconds = isNaN(parseInt(i[3])) ? 40 : parseInt(i[3])
+								const seconds = isNaN(parseInt(i[2])) ? 40 : parseInt(i[2])
 								
 								d3Json.children.find(e => e.name == bossName).children.push({
 									name: i[0],
