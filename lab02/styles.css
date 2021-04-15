@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&display=swap");
+
+div,
+ul {
+  border: solid black 1px;
+  margin: 5px;
+  padding: 10px;
+  background-color: rgba(255, 255, 128, 0.1);
+}
+
+div:hover,
+ul:hover {
+  background-color: rgba(255, 128, 128, 0.1);
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  padding: 10px;
+  background-color: rgba(255, 255, 0, 0.02);
+}
+
+svg {
+  font-family: "Noto Serif JP", serif;
+}
+
+#dropfile {
+  height: 5%;
+  width: 100%;
+  border-style: dotted;
+  display: block;
+  text-align: center;
+  animation-name: oxxo;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  padding: 10px;
+  background-color: rgba(255, 255, 0, 0.1);
+  font-family: "Noto Serif JP", serif;
+  margin-bottom: 10px;
+}
+#dropfile:hover {
+  background-color: rgba(128, 255, 255, 0.1);
+}
+@keyframes oxxo {
+  from {
+    border-style: dotted;
+    border-color: blue;
+    color: blue;
+  }
+  to {
+    border-style: solid;
+    border-color: red;
+    color: crimson;
+  }
+}
+
+#treemap {
+  height: 95%;
+  width: 100%;
+}
