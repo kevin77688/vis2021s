@@ -1,6 +1,7 @@
 var allText = null;
 var treemapContainer = null;
 var objectKeys = null;
+var rectList = null;
 
 var Base64 = {
   _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
@@ -79,17 +80,35 @@ var Base64 = {
   },
 };
 
+function gethsl(value) {
+  value = parseInt(value);
+  return (value + 50) < 359 ? value + 50 : (value + 50) % 360;
+}
+
+function changeColor() {
+  rectList = document.getElementsByClassName("customColor");
+  console.log(rectList);
+  for (var i = 0; i < rectList.length; i++) {
+    var currentHSL = rectList[i].getAttribute("tag");
+    var nextHSL = gethsl(currentHSL);
+    var nextHSLText = "hsl(" + currentHSL + ",100%, 50%)";
+    rectList[i].setAttribute("fill", nextHSLText);
+    rectList[i].setAttribute("tag", nextHSL);
+  }
+}
+
 function onPageload() {
   treemapContainer = document.getElementById("treemap");
   objectKeys = document.getElementById("ObjectKeys");
-  getFile();
+
   document
     .getElementById("dropfile")
     .addEventListener("dragover", function (evt) {
       evt.preventDefault();
     });
-
   onFileDrop();
+  getFile();
+  window.setInterval(changeColor, 1000);
 }
 
 function buildTree(result) {

@@ -6,7 +6,15 @@
       <script src="dataLoader.js"></script>
       <script src="getNode.js"></script>
       <script src="treemap.js"></script>
-      <script> document.addEventListener("DOMContentLoaded", onPageload(), false); </script>
+      <script>
+         document.addEventListener(
+           "DOMContentLoaded",
+           function () {
+             onPageload();
+           },
+           false
+         );
+      </script>
    </head>
    <body>
       <div>Lab 02 treemap</div>
@@ -24,5 +32,8 @@
          </select>
       </div>
       <div id="treemap"></div>
+      <script>
+        
+      </script>
    </body>
 </html>
