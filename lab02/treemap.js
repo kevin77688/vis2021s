@@ -82,7 +82,7 @@ var Base64 = {
 
 function gethsl(value) {
   value = parseInt(value);
-  return (value + 50) < 359 ? value + 50 : (value + 50) % 360;
+  return (value + 1) < 359 ? value + 1 : (value + 1) % 360;
 }
 
 function changeColor() {
@@ -91,7 +91,7 @@ function changeColor() {
   for (var i = 0; i < rectList.length; i++) {
     var currentHSL = rectList[i].getAttribute("tag");
     var nextHSL = gethsl(currentHSL);
-    var nextHSLText = "hsl(" + currentHSL + ",100%, 50%)";
+    var nextHSLText = "hsl(" + currentHSL + ",100%, 40%)";
     rectList[i].setAttribute("fill", nextHSLText);
     rectList[i].setAttribute("tag", nextHSL);
   }
@@ -108,7 +108,7 @@ function onPageload() {
     });
   onFileDrop();
   getFile();
-  window.setInterval(changeColor, 1000);
+  window.setInterval(changeColor, 50);
 }
 
 function buildTree(result) {
@@ -130,7 +130,7 @@ function getFile() {
   var csvFile = new XMLHttpRequest();
   csvFile.open(
     "GET",
-    "https://raw.githubusercontent.com/kevin77688/vis2021s/master/lab02/data.csv",
+    "https://raw.githubusercontent.com/kevin77688/vis2021s/master/lab02/data2.csv",
     true
   );
   csvFile.onreadystatechange = function () {

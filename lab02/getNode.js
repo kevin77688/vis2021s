@@ -143,7 +143,10 @@ function getNode(data, layer, container) {
       return d.y0 + 35;
     })
     .text(function (d) {
-      if (d.data.size > 0) return d.data.value;
+      if (d.data.size > 0) {
+        var value = Math.round(d.data.value/100000000) / 10;
+        return value.toString() + "億";
+      }
       else return "";
     })
     .attr("font-size", function (d) {
