@@ -11,7 +11,7 @@
       padding: 10px;
       margin: 1px;
       display: inline-block;
-      width: 20px;
+      width: 5px;
       background-color: cyan;
       vertical-align: text-bottom;
     }
@@ -57,7 +57,7 @@
             })
             .attr("class", "bar")
             .style("height", function (d) {
-              return d[1] + 'px';
+              return d[1] * 10 + 'px';
             });
         }
     };
