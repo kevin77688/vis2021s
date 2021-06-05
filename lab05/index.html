@@ -4,21 +4,15 @@
 <head>
   <meta charset="utf-8">
   <title>Lab</title>
-  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script> <!-- v6.5.0 -->
+  <script src="https://d3js.org/d3.v6.min.js" charset="utf-8"></script> <!-- v6.5.0 -->
   <style type="text/css">
-    div.bar {
-      border: 1px black solid;
-      padding: 10px;
-      margin: 1px;
-      display: inline-block;
-      width: 5px;
-      background-color: cyan;
-      vertical-align: text-bottom;
-    }
-
     body {
       border: 1px red solid;
       padding: 20px;
+    }
+
+    .bar {
+      fill: blue;
     }
   </style>
 </head>
@@ -33,35 +27,77 @@
     // .classed("bar", false)
     // .classed("bar", true);
 
-    var csvFile = new XMLHttpRequest();
-    csvFile.open(
-      "GET",
-      "https://raw.githubusercontent.com/kevin77688/vis2021s/master/lab05/data.csv",
-      true
-    );
-    csvFile.onreadystatechange = function () {
-      if (csvFile.readyState === 4)
-        if (csvFile.status === 200) {
-          var parsedCSV = d3.csv.parseRows(csvFile.responseText);
+    var csvURL = "https://raw.githubusercontent.com/kevin77688/vis2021s/master/lab05/data.csv";
 
-          d3.select("body")
-            .selectAll("div")
-            .data(parsedCSV)
-            .enter()
-            .append("div")
-            .filter(function (d, i) {
-              return (i > 0);
-            })
-            .text(function (d) {
-              return d[1];
-            })
-            .attr("class", "bar")
-            .style("height", function (d) {
-              return d[1] * 10 + 'px';
-            });
-        }
-    };
-    csvFile.send(null);
+    var margin = {
+        top: 20,
+        right: 20,
+        bottom: 30,
+        left: 40
+      },
+      width = window.innerWidth * 2 / 3,
+      height = window.innerHeight * 2 / 3,
+      fontSize = 15;
+
+    var svg = d3.select("body")
+      .append("svg")
+      .attr("width", width + margin.right + margin.left)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var x = d3.scaleBand()
+      .range([0, width])
+      .padding(0.2);
+
+    var y = d3.scaleLinear()
+      .range([height, 0]);
+
+    var converter = function (d) {
+      return {
+        Index: parseInt(d.組界),
+        Frequency: parseInt(d.頻率)
+      };
+    }
+
+    d3.csv(csvURL, converter).then(function (data) {
+      data.forEach(function (d) {
+        d.Index = +d.Index;
+      });
+
+      x.domain(data.map(function (d) {
+        return d.Index;
+      }));
+      y.domain([0, d3.max(data, function (d) {
+        return d.Frequency
+      })]);
+
+      svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) {
+          return x(d.Index);
+        })
+        .attr("y", function (d) {
+          return y(d.Frequency);
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", function (d) {
+          return height - y(d.Frequency);
+        });
+
+      svg.append("g")
+        .attr("id", "xaxis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+      svg.append("g")
+        .attr("id", "yaxis")
+        .call(d3.axisLeft(y));
+
+    })
   </script>
 
 </html>
