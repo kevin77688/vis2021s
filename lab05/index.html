@@ -14,6 +14,10 @@
     .bar {
       fill: blue;
     }
+
+    .bar:hover{
+      fill: pink;
+    }
   </style>
 </head>
 
@@ -87,6 +91,21 @@
         .attr("height", function (d) {
           return height - y(d.Frequency);
         });
+
+      svg.selectAll("text")
+        .data(data)
+        .enter()
+        .append("text")
+        .text(function (d) {
+          return d.Frequency;
+        })
+        .attr("id", "amt")
+        .attr("x", function (d) {
+          return x(d.Index) + (x.bandwidth()) / 2 - fontSize / 2;
+        })
+        .attr("y", height - fontSize / 2)
+        .attr("font-family", "sans-serif")
+        .attr("font-size", fontSize + "px");
 
       svg.append("g")
         .attr("id", "xaxis")
