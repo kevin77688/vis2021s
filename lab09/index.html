@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-Hant-TW">
+<html>
 
 <head>
-  <meta charset="utf-8">
-  <title>D3 Page Template</title>
+  <title></title>
+  <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
   <style type="text/css">
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@900&display=swap');
-
     video {
       position: absolute;
       top: 50%;
@@ -26,246 +23,106 @@
     }
 
     svg text {
-      /* font-weight: 100; */
-      font-size: 60px;
+      font-size: 40px;
       fill: white;
       stroke: blue;
-      font-family: 'Noto Sans JP', 'Noto Serif JP', 'MS PGothic';
+      font-family: 'MS PGothic';
     }
-
-    #clock {
-      /* font-weight: 100; */
-      font-size: 36px;
-      fill: white;
-      stroke: blue;
-      font-family: 'Noto Sans JP', 'Noto Serif JP', 'MS PGothic';
-    }
-
 
     text:hover {
       fill: red;
     }
 
-    #replay:hover {
-      box-shadow: 0px 0px 5px 5px rgba(255, 128, 128, 0.5);
-    }
-
-    #video:hover {
-      box-shadow: 0px 0px 5px 5px rgba(128, 255, 128, 0.5);
-    }
-
-    #subtitle:hover {
-      box-shadow: 0px 0px 5px 5px rgba(128, 128, 255, 0.5);
-    }
-
-    .text_black {
-      fill: black;
-      text-shadow:
-        1px 0 0 white,
-        0 1px 0 white,
-        -1px 0 0 white,
-        0 -1px 0 white,
-        -1px -1px 0 white,
-        1px -1px 0 white,
-        -1px 1px 0 white,
-        1px 1px 0 white;
+    #subtitle {
+      pointer-events: none;
     }
   </style>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-
-  <script type="text/javascript">
-    // Your beautiful D3 code will go here
-
-    function playVideo() {
-      document.getElementById('video').play();
-    }
-
-    d3.select('#video')
-      .on("click", function () {
-        document.getElementById('video').play();
-      })
-
-    d3.select('#subtitle')
-      .on("click", function () {
-        document.getElementById('video').play();
-      })
-  </script>
 </head>
-
 
 <body>
 
-  <button onclick="playVideo()">Play</button>
   <video id="video" width="960px" height="540" preload="auto"
-    onended="document.getElementById('replay').style.display='inline'; document.getElementById('video').style.display='none'; d3.select('#subtitle').remove();"
-    style="display: none;" __idm_id__="460022785">
-    <source src="Hated_by_Life_Itself.mp4" type="video/mp4">
+    onended="document.getElementById('replay').style.display='inline'; document.getElementById('video').style.display='none'; d3.select('#subtitle').remove();">
+    <source src="./Hated_by_Life_Itself.mp4" type="video/mp4">
   </video>
 
   <div id="srt"></div>
 
   <script type="text/javascript">
     document.getElementById("video").style.display = "none";
-
-    d3.select('body')
-      .append('svg')
-      .attr('id', 'replay')
-      .attr('width', 960)
-      .attr('height', 540)
-      .append('text')
-      .text("Replay")
-      .attr('x', 540)
-      .attr('y', 279)
-      .attr("text-anchor", "middle")
-      .on('click', function () {
-        document.getElementById("video").play();
-        document.getElementById("video").style.display = "inline";
-        //document.getElementById("subtitle").style.display = "inline";
-        //this.style.display = 'none';
-        document.getElementById("replay").style.display = "none";
-        make_subtitle();
-      });
-
+    d3.select('body').append('svg').attr('id', 'replay').attr('width', 960).attr('height', 540).append('text').text("Replay").attr('x', 540).attr('y', 279).attr("text-anchor", "middle").on('click', function () {
+      document.getElementById("video").play();
+      document.getElementById("video").style.display = "inline";
+      document.getElementById("replay").style.display = "none";
+      make_subtitle();
+    });
     var myarray = [];
     var key;
     var begin;
     var end;
     var dur;
     var subtitle;
-
-    var time;
-
-    var to_clock = function (time) {
-      if (time % 60 < 10)
-        return '0' + parseInt(time / 60) + ':' + '0' + time % 60;
-      else
-        return '0' + parseInt(time / 60) + ':' + time % 60;
-    }
-
+    var time = 0;
 
     function play_time() {
-
       time = 0;
-
-      var time2 = parseInt(document.getElementById("video").duration);
-      //alert(time2 + ' seconds');
-
       let timer = setInterval(() => {
-
-        var mytime = to_clock(time);
-        var mytime2 = to_clock(time2);
-
-        d3.select('#subtitle')
-          .append('text')
-          .attr('id', 'clock')
-          .text(mytime + ' / ' + mytime2)
-          .attr('x', 700)
-          .attr('y', 40)
-          .attr('opacity', 0)
-          .transition()
-          .duration(1000)
-          .attr('opacity', 1)
-          .transition()
-          .duration(1000)
-          .attr('opacity', 0)
-          .remove();
-
+        var mytime;
+        if (time % 60 < 10) mytime = '0' + parseInt(time / 60) + ':' + '0' + time % 60;
+        else mytime = '0' + parseInt(time / 60) + ':' + time % 60;
+        d3.select('#subtitle').append('text').text(mytime + '/4:49').attr('x', 650).attr('y', 60).attr('opacity', 0).transition().duration(1000).attr('opacity', 1).transition().duration(1000).attr('opacity', 0).remove();
         time++;
       }, 1000);
     }
 
-
     function make_subtitle() {
-
       d3.text('Hated_by_Life_Itself.srt', function (data) {
-        //alert(data);
-
+        console.log(data);
         parsedCSV = d3.csvParseRows(data);
-        // console.log(parsedCSV);
-        //alert('parsedCSV.length = ' + parsedCSV.length);
-
-        d3.select('#srt')
-          .selectAll('p')
-          .data(parsedCSV)
-          .enter()
-          .append("p")
-          .text(function (d, i) {
-            //return d;
-            if (!isNaN(d) && d != '') {
-              key = parseInt(d);
-            } else if (d == '') {
-              myarray.push({
-                "key": key,
-                "begin": begin,
-                "end": end,
-                "dur": end - begin,
-                "subtile": subtile
-              });
-            } else if (d.length == 3) {
-              begin = (parseInt(d[0][3]) * 10 + parseInt(d[0][4])) * 60 +
-                (parseInt(d[0][6]) * 10 + parseInt(d[0][7]));
-
-              end = (parseInt(d[1][11]) * 10 + parseInt(d[1][12])) * 60 +
-                (parseInt(d[1][14]) * 10 + parseInt(d[1][15]));
-            } else {
-              subtile = d;
-            }
-          });
-
+        console.log(parsedCSV);
+        d3.select('#srt').selectAll('p').data(parsedCSV).enter().append("p").text(function (d, i) {
+          if (!isNaN(d) && d != '') {
+            key = parseInt(d);
+          } else if (d == '') {
+            myarray.push({
+              "key": key,
+              "begin": begin,
+              "end": end,
+              "dur": end - begin,
+              "subtile": subtile
+            });
+          } else if (d.length == 3) {
+            begin = (parseInt(d[0][3]) * 10 + parseInt(d[0][4])) * 60 + (parseInt(d[0][6]) * 10 + parseInt(d[0][7]));
+            end = (parseInt(d[1][11]) * 10 + parseInt(d[1][12])) * 60 + (parseInt(d[1][14]) * 10 + parseInt(d[1][15]));
+          } else {
+            subtile = d;
+          }
+        });
         // 完成歌詞
-        // console.log(myarray);
-
+        console.log(myarray);
         // 完成歌詞
         var w = 960;
         var h = 540;
-
-        var svg = d3.select('body')
-          .append('svg')
-          .attr('id', 'subtitle')
-          .attr('width', w)
-          .attr('height', h)
-          .attr('viewbox', function () {
-            return "0, 0, " + w + ', ' + h;
-          });
-
-        svg.selectAll('text')
-          .data(myarray)
-          .enter()
-          .append('text')
-          .attr('class', 'text_1')
-          .text(function (d, i) {
-            return d.subtile;
-          })
-          .attr('begin', function (d, i) {
-            return d.begin;
-          })
-          .attr('end', function (d, i) {
-            return d.end;
-          })
-          .attr('x', w / 2)
-          .attr('y', h - 50)
-          .attr("text-anchor", "middle")
-          //.style('display', 'none')
-          .attr('opacity', 0)
-          .transition()
-          .delay(function (d) {
-            return (d.begin - d.dur / 2) * 1000;
-          })
-          .duration(function (d) {
-            return (d.dur + d.dur / 2) * 1000;
-          })
-          .attr('opacity', 1)
-          .transition()
-          .duration(function (d) {
-            return (d.dur / 6.0 * 1000.0);
-          })
-          .attr('opacity', 0);
-
+        var svg = d3.select('body').append('svg').attr('id', 'subtitle').attr('width', w).attr('height', h).attr('viewbox', function () {
+          return "0, 0, " + w + ', ' + h;
+        });
+        svg.selectAll('text').data(myarray).enter().append('text').text(function (d, i) {
+          return d.subtile;
+        }).attr('begin', function (d, i) {
+          return d.begin;
+        }).attr('end', function (d, i) {
+          return d.end;
+        }).attr('x', w / 2).attr('y', h - 50).attr("text-anchor", "middle").attr('opacity', 0).transition().delay(function (d) {
+          return (d.begin - d.dur / 2) * 1000;
+        }).duration(function (d) {
+          return (d.dur + d.dur / 2) * 1000;
+        }).attr('opacity', 1).transition().duration(function (d) {
+          return (d.dur / 6.0 * 1000.0);
+        }).attr('opacity', 0);
         play_time();
       })
     }
-  // </script><svg id="replay" width="960" height="540"><text x="540" y="279" text-anchor="middle">Replay</text></svg>
-
+  </script>
 </body>
 
 </html>
