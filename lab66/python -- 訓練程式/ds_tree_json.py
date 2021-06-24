@@ -140,11 +140,9 @@ def tree_state(datasetX, datasety, clf, features, dataIndex, node_index=0, nodes
         
     return nodes
 
-datacsv = pd.read_csv(str(pathlib.Path.cwd())+'\\rawData.csv')
+datacsv = pd.read_csv(str(pathlib.Path.cwd())+'\test2.csv')
 datacsv = datacsv.fillna(0)
 labelencoder = LabelEncoder()
-datacsv['killed_by']= labelencoder.fit_transform(datacsv['killed_by'])
-print(datacsv)
 
 columns = datacsv.columns.tolist()
 

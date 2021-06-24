@@ -7,9 +7,13 @@
 
     <style>
         html,
-        body {
+        body{
             height: 200%;
+			background-repeat: round;
+			background-attachment: fixed;
+			font-family: 'Noto Sans TC', sans-serif;
         }
+
         #training-section, #testing-section {
             height: 100%;
 			overflow: hidden;
@@ -36,37 +40,116 @@
             height: 100%;
             float: left;
         }
+        li {
+            font-size: larger;
+            font-weight: bold;
+        }
+        h1 {
+            font-size: 48pt;
+        }
+        h2 {
+            font-size: 36pt;
+        }
+        p {
+            font-weight: bold;
+            font-size: larger;
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 
-<body>
-
-
-        <div id="right">
-            <div id="train-vs-test"></div>
-        </div>
+<body background="./media/14275575121193.png" class="has-bg-img">
 
         <div id="left">
             <div id="training-section">
+                <img src="media/league_of_legends_logo.png">
 				<h1>
 					訓練資料集的部分
 				</h1>
+                <h2 align="center">
+                    資料介紹
+                </h2>
+                <p>
+                    此資料集是收集英雄聯盟(LOL)高分段場遊戲數據，有近1萬筆鑽一到大師的數據，玩家實力相近。<br>
+                </p>
+                <img src="media/League+of+Legends+rank+distribution+June+2021+Season+11.jpg">
+                <h2 align="center">
+                    資料處理
+                </h2>
+                    <ol>
+                        <li>原本資料欄位為藍方數值與紅方數值(例如藍方擊殺數、藍方擊殺數。)，改成差值(藍方擊殺數-紅方擊殺數)</li>
+                        <li>選取其中部分資料(約500筆)</li>
+                    </ol>
+                <h2 align="center">
+                    資料欄位
+                </h2>
+                <ul>
+                    <li>勝方</li>
+                    <li>守衛放置數(差)</li>
+                    <li>守衛破壞數(差)</li>
+                    <li>首殺</li>
+                    <li>擊殺數(差)</li>
+                    <li>死亡數(差)</li>
+                    <li>助攻數(差)</li>
+                    <li>菁英野怪數(差)</li>
+                    <li>小龍擊殺數(差)</li>
+                    <li>預示者擊殺數(差)</li>
+                    <li>推塔數(差)</li>
+                    <li>總經濟(差)</li>
+                    <li>平均等級(差)</li>
+                    <li>總經驗(差)</li>
+                    <li>總小兵擊殺(差)</li>
+                    <li>總野怪擊殺(差)</li>
+                </ul>
+                <h2 align="center">
+                    訓練結果
+                </h2>
+                <p>
+                    欄位出現次數:
+                </p>
+                    <ol>
+                        <li>總經濟: 10</li>
+                        <li>總野怪擊殺: 7</li>
+                        <li>助攻數: 5</li>
+                    </ol>
+                <p>
+                    有些欄位性質相似或重複，如擊殺數=-死亡數、菁英野怪擊殺數=小龍擊殺數+預示者擊殺數。
+                </p>
+                <h2 align="center">
+                    資料來源
+                </h2>
+                <p>
+                    <a href="https://www.kaggle.com/bobbyscience/league-of-legends-diamond-ranked-games-10-min" target="_blank">https://www.kaggle.com/bobbyscience/league-of-legends-diamond-ranked-games-10-min</a><br>
+                </p>
             </div>
             <div id="testing-section">
 				<h1>
 					測試資料集的部分
 				</h1>
+                <h2 align="center">
+                    測試結果
+                </h2>
+                <p>
+                    因為資料只包含遊戲前10分鐘的資訊，而LOL高段位平均時間為26分鐘左右，所以測試結果只有83.1%。
+                    此外LOL隨著段位越高，平均遊戲時間越低，如下圖。
+                    所以若此收集的資料是低段位遊戲前10分鐘的資訊，測試結果可能會更差。
+                </p>
+                <img src="media/1.PNG">
             </div>
         </div>
         
-        
+        <div id="right">
+            <div id="train-vs-test"></div>
+        </div>
         
         
         <script src="./lib/d3.v3.min.js"></script>
         <script src="./lib/binarydecisiontree.min.js"></script>
 
         <script>
-            var Lipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
             window.onload = function () {
                 function resizeRight(){
@@ -79,49 +162,7 @@
 
                 d3.select(window)
                     .on("resize", function(){ resizeRight() })
-                ;
-
-
-                /**
-                 * 填版面，不然全部都是白色的很單調
-                 * 這兩個 section 是要讓同學放說明資料和圖片的地方
-                */
-                d3.select("#training-section")
-                    .selectAll("p")
-                    .data(d3.range(1, 10))
-                    .enter()
-                    .append("p")
-                    .text(Lipsum)
-                ;
-
-                d3.select("#testing-section")
-                    .selectAll("p")
-                    .data(d3.range(1, 10))
-                    .enter()
-                    .append("p")
-                    .text(Lipsum)
-                ;
-				
-				d3.select("#training-section")
-                    .selectAll("img")
-					.data(d3.range(1, 4))
-					.enter()
-					.append("img")
-					.attr("src", function(d){ return "media/" + d + ".png"})
-                    .style('height', '350px')
-                    .style('width', '350px')
-                ;
-
-                d3.select("#testing-section")
-                    .selectAll("img")
-					.data(d3.range(4, 7))
-					.enter()
-					.append("img")
-					.attr("src", function(d){ return "media/" + d + ".png"})
-                    .style('height', '350px')
-                    .style('width', '350px')
-                ;
-				
+                ;			
 				
 
                 var bdt = new BinaryDecisionTree({
